@@ -1,0 +1,5 @@
+{
+    "name": "test_mod_02",
+    "description": "A test mod created during design of the mod loader. Adds an input handler to scene_select which toggles the grid's visibility when you press space",
+    "author": "SunPraise"
+}

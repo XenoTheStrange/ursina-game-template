@@ -1,0 +1,5 @@
+{
+    "name": "test_mod_01",
+    "description": "A test mod created during design of the mod loader. Adds a smiley face to the language select screen",
+    "author": "SunPraise"
+}
