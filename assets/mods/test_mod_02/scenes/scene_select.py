@@ -1,6 +1,5 @@
 import ursina as u
-
-name = "scene_select"
+from classes.SceneMod import SceneMod
 
 def controls(key):
     if key == "space":
@@ -15,8 +14,4 @@ def Prefix(scene):
     )
     return entities
 
-def Postfix(scene):
-    return None
-
-def Replace_Loader():
-    return False
+scene_mod = SceneMod(name="scene_select", prefix=Prefix)

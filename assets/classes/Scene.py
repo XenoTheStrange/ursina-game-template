@@ -3,7 +3,7 @@ from scripts.logger import log
 
 class Scene:
     """Encapsulation for scenes"""
-    def __init__(self, name="unnamed_scene", entities=None, controls=None, parent=None, loader=None):
+    def __init__(self, name=None, entities=None, controls=None, parent=None, loader=None):
         self.name = name
         if not entities is None:
             self.entities = entities
@@ -20,13 +20,16 @@ class Scene:
     def add_entities(self, entities):
         for entity in entities:
             self.entities.append(entity)
+    def load(self):
+        if self.loader is not None:
+            self.add_entities(self.loader(self))
     def load_mods(self, func_list):
         for func in func_list:
             entities = func(self)
             if entities is not None:
                 self.add_entities(entities)
     def destroy(self):
-        log.debug(f"Destroying scene: {self.name}")
+        #log.debug(f"Destroying scene: {self.name}")
         for entity in self.entities:
             try:
                 ursina.destroy(entity)
@@ -35,10 +38,7 @@ class Scene:
                 #'NoneType' object has no attribute 'eternal'
                 pass
     def create(self):
-        log.debug("Exucuting Prefixes for scene %s", self.name)
         self.load_mods(self.mods_prefix)
-        if self.loader is not None:
-            self.loader()
-        log.debug("Exucuting Postfixes for scene %s", self.name)
+        self.load()
         self.load_mods(self.mods_postfix)
 

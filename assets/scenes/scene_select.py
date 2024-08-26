@@ -22,8 +22,8 @@ def create_nav_button(name, position=(0,0), scale=(1,1), parent=u.camera.ui):
         parent=parent
         )
 
-def start():
-    global scene
+def loader(scene):
+    #global scene
     entities = [] #list of entities
     grid = Grid(width=6, height=6, cell_size=1).render()
     if manager.Language == "":
@@ -39,8 +39,10 @@ def start():
         if x_pos % grid.width == 0:
             x_pos = 0
             y_pos -= 1
+    position = grid.grid_to_world(0, 0-grid.height, origin="center", coc=True)
     entities.append(u.Button(text=f"Language: {manager.Language}", position=u.window.bottom+(0,0.1,0), scale=(.1,.05)))
     entities.append(grid)
-    scene.add_entities(entities)
+    return entities
+    #scene.add_entities(entities)
 
-scene = Scene("scene_select", loader=start, controls=controls)
+scene = Scene("scene_select", loader=loader, controls=controls)
