@@ -11,7 +11,7 @@ def loader(scene):
     font="fonts/Helvetica-Bold.ttf"
     text_scale = (10,12)
     #background stuff
-    entities.append(u.Entity(model="quad", scale=(2,2), color=u.color.black, position=(0,0,0), parent=u.camera.ui))
+    #entities.append(u.Entity(model="quad", scale=(2,2), color=u.color.black, position=(0,0,0), parent=u.camera.ui))
     entities.append(u.Entity(model="quad", scale=(1,1.1), position=(0,0,-0.5), texture="bg_language_select", parent=u.camera.ui))
     #buttons
     english_btn = u.Button(scale=(.175,.128), position=(0,0.075,-1), icon="english_flag", parent=u.camera.ui, on_click=lambda:select_language("English"))

@@ -15,7 +15,7 @@ Language = ""
 devmode = False
 
 def get_scene(name):
-    if name == "all":
+    if name is True:
         return globals()['Scenes']
     for scene in globals()['Scenes']:
         if scene.name == name:

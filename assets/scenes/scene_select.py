@@ -30,7 +30,7 @@ def loader(scene):
         manager.Language = "English"
     x_pos = 0
     y_pos = 0
-    scene_names = [scene.name for scene in manager.get_scene("all")]
+    scene_names = [scene.name for scene in manager.get_scene(True)]
     for name in scene_names:
         width, height = 0.8,0.8
         position = grid.grid_to_world(x_pos, y_pos, origin="top left", coc=True)
@@ -39,8 +39,8 @@ def loader(scene):
         if x_pos % grid.width == 0:
             x_pos = 0
             y_pos -= 1
-    position = grid.grid_to_world(0, 0-grid.height, origin="center", coc=True)
-    entities.append(u.Button(text=f"Language: {manager.Language}", position=u.window.bottom+(0,0.1,0), scale=(.1,.05)))
+    position = grid.grid_to_world(0, 0, origin="center", coc=True)
+    entities.append(u.Button(text=f"Language: {manager.Language}", position=position, scale=(.1,.05)))
     entities.append(grid)
     return entities
     #scene.add_entities(entities)
