@@ -58,7 +58,7 @@ def get_folders(dir):
 def get_scene_names(dir):
     return [i.split(".")[:-1][0] for i in os.listdir(dir) if not i=="__init__.py" and ".py" in i]
 
-def load_scenes():
+def load_all_scenes():
     globals()['Scenes'] = []
     log.debug("Loading scenes from %s", "./scenes")
     scene_names = get_scene_names("./scenes")
@@ -97,7 +97,7 @@ def load_mod(path, folder):
             log.debug("Loaded unique modded scene: %s", scene_mod.name)
             globals()['Scenes'].append(new_scene)
 
-def load_mods():
+def load_all_mods():
     #add the mods dir to the path so they can use relative imports
     mods_dir = os.path.abspath('./mods')
     sys.path.insert(0, mods_dir)
@@ -109,7 +109,7 @@ def load_mods():
     log.debug(f"Mods loaded: {', '.join([mod['name'] for mod in globals()['Mods']])}")
 
 def initialize():
-    load_scenes()
-    load_mods()
+    load_all_scenes()
+    load_all_mods()
     scene = "scene_select" if devmode else "language_select"
     change_scene(scene)
