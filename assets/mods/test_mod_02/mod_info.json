@@ -1,5 +1,7 @@
 {
     "name": "test_mod_02",
-    "description": "A test mod created during design of the mod loader. Adds an input handler to scene_select which toggles the grid's visibility when you press space",
-    "author": "SunPraise"
+    "description": "A test mod created during design of the mod loader. Adds an input handler to scene_select which toggles the grid's visibility when you press space.\nIt also serves as a test of relative imports after I added the mods directory to the python path.",
+    "author": "SunPraise",
+    "module_dependencies": [],
+    "mod_dependencies": []
 }

@@ -1,17 +1,26 @@
 import ursina as u
 from classes.SceneMod import SceneMod
+from scripts.logger import error_handler
 
-def controls(key):
+from scripts.manager import log
+from ..classes.import_test import Test
+
+@error_handler
+def toggle_grid(scene):
+    grid = scene.get_entity_named("grid.scenes")
+    grid.toggle_visibility()
+
+def controls(key, scene):
     if key == "space":
-        for entity in u.scene.entities:
-            if entity.getTag("type") == "grid":
-                entity.toggle_visibility()
+        toggle_grid(scene)
 
 def Prefix(scene):
     entities = []
     entities.append(
-        u.Entity(input=controls)
+        u.Entity(input=lambda key: controls(key, scene))
     )
+    test = Test()
+    log.debug(test.speak())
     return entities
 
 scene_mod = SceneMod(name="scene_select", prefix=Prefix)

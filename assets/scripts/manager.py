@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import sys
 import traceback
 import importlib
 import json
@@ -97,6 +98,9 @@ def load_mod(path, folder):
             globals()['Scenes'].append(new_scene)
 
 def load_mods():
+    #add the mods dir to the path so they can use relative imports
+    mods_dir = os.path.abspath('./mods')
+    sys.path.insert(0, mods_dir)
     globals()['Mods'] = []
     log.debug("Loading mods from ./mods")
     folders = get_folders("./mods")

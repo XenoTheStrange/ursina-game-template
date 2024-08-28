@@ -1,5 +1,8 @@
+import traceback
+
 import ursina
 from scripts.logger import log
+from scripts.logger import error_handler
 
 class Scene:
     """Encapsulation for scenes"""
@@ -17,6 +20,12 @@ class Scene:
         self.entities.append(self.controller)
         self.mods_prefix=[]
         self.mods_postfix=[]
+    @error_handler
+    def get_entity_named(self, name):
+        for entity in self.entities:
+            if hasattr(entity, "name"):
+                if entity.name == name:
+                    return entity
     def add_entities(self, entities):
         for entity in entities:
             self.entities.append(entity)
@@ -37,6 +46,7 @@ class Scene:
                 #log.debug("Failed to destroy item: ", e)
                 #'NoneType' object has no attribute 'eternal'
                 pass
+        self.entities = []
     def create(self):
         self.load_mods(self.mods_prefix)
         self.load()

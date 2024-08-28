@@ -21,7 +21,7 @@ def configure_app():
     args = parse_arguments()
     if args.debug:
         manager.devmode = True
-    u.window.setFixedSize(True)
+    #u.window.setFixedSize(True)
     app = u.Ursina(title="Sonny 2", icon="./textures/ursina.ico", fullscreen=True, borderless=False, forced_aspect_ratio=16/9)
     return app
 

@@ -9,13 +9,13 @@ class Grid(u.Entity):
     var.render() if you need to render it"""
     
     #def set_properties(self, cell_size=1, width=5, height=5, position=(0,0,0)):
-    def __init__(self, cell_size=1, width=5, height=5, position=(0,0,0)):
+    def __init__(self, cell_size=1, width=5, height=5, position=(0,0,0), name="grid"):
         super().__init__()
         self.cell_size = cell_size
         self.width = width
         self.height = height
         self.position = position
-        self.setTag("type", "grid")
+        self.name = name
     
     def grid_to_world(self, x, y, origin="center", coc=False):
         """Calculate the onscreen position of items based on the desired grid position.
