@@ -1,7 +1,8 @@
 import ursina as u
 
-class language_flag_button(u.Entity):
-    def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model=u.Default, texture=None, onclick=(None, None), collider=None, **kwargs):
+class glow_button(u.Entity):
+    """A button for the flags in the language-select screen"""
+    def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model="quad", texture=None, onclick=(None, None), collider="box", text=None, text_scale=(10,12), text_position=(0.6,0.1,-2), text_font="fonts/Helvetica-Bold.ttf", **kwargs):
         super().__init__()
         self.position = position
         self.scale = scale
@@ -10,10 +11,15 @@ class language_flag_button(u.Entity):
         self.texture = texture
         self.onclick = onclick
         self.collider = collider
+
         self.glowing = False
+        self.lmd=False # left mouse down
+
         self.glow_entity = u.Entity(scale=(1,1), position=(0,0,-1), parent=self, model=model, color=u.hsv(0,0,100,a=0))
         self.drop_shadow_entity = u.Entity(scale=(1,1), parent=self, position=(0.02,-0.04,0.01), model=model, color=u.hsv(0,0,0,a=0.5))
-        self.lmd=False # left mouse down
+        if text is not None:
+            self.language_text = u.Text(text=text, scale=text_scale, parent=self, position=text_position, font=text_font)
+            self.language_text_shadow = u.Text(text=text, scale=text_scale, parent=self, position=text_position+(0.02,-0.04,1), color=u.color.black, font=text_font)
 
     def destroy(self):
         u.destroy(self)
@@ -36,11 +42,10 @@ class language_flag_button(u.Entity):
             self.stop_glowing()
             self.glowing=False
     def start_glowing(self):
+        #if the left mouse button is already held down, use the second glow effect instead
         if self.lmd:
             self.glow_entity.animate_color(u.hsv(0,0,100, a=0.1), duration=.02, interrupt='stop')
         else:    
             self.glow_entity.animate_color(u.hsv(0,0,100, a=0.2), duration=.02, interrupt='stop')
-        print("todo")
     def stop_glowing(self):
         self.glow_entity.animate_color(u.hsv(0,0,100, a=0), duration=.02, interrupt='stop')
-

@@ -20,7 +20,7 @@ def Prefix(scene):
         u.Entity(input=lambda key: controls(key, scene))
     )
     test = Test()
-    log.debug(test.speak())
+    #log.debug(test.speak())
     return entities
 
 scene_mod = SceneMod(name="scene_select", prefix=Prefix)
