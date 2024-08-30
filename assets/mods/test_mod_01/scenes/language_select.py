@@ -35,7 +35,7 @@ def Prefix(scene):
         model="quad",
         texture="sun",
         )
-    button.onclick = (lambda:swap_texture(button), lambda:print("Right clicked yarasun"))
+    button.onclick = (lambda:swap_texture(button), lambda:button.destroy())
     button.collider = u.SphereCollider(button, radius=.15)
     return [button]
 
