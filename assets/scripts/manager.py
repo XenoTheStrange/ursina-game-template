@@ -11,6 +11,8 @@ import ursina
 
 Scenes = []
 Mods = []
+Cursor = ""
+cursor_default_texture = "cursor_default"
 CurrentScene = ""
 Language = ""
 devmode = False
@@ -26,6 +28,7 @@ def get_scene(name):
 def change_scene(name):
     """Destroy the current scene and load a new one"""
     global CurrentScene
+    globals()["Cursor"].texture = globals()["cursor_default_texture"]
     log.info("Loading scene: %s", name)
     try:
         scene = get_scene(name)
@@ -109,6 +112,8 @@ def load_all_mods():
     log.debug(f"Mods loaded: {', '.join([mod['name'] for mod in globals()['Mods']])}")
 
 def initialize():
+    globals()['Cursor'] = ursina.Cursor(name="game_cursor", texture="cursor_default")
+    ursina.mouse.visible = False
     load_all_scenes()
     load_all_mods()
     scene = "scene_select" if devmode else "language_select"

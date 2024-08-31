@@ -1,5 +1,6 @@
 import ursina as u
 from classes.SceneMod import SceneMod
+from scripts.manager import Cursor
 
 class test_button(u.Entity):
     def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model=u.Default, texture=None, onclick=(None, None), collider=None, **kwargs):
@@ -12,6 +13,7 @@ class test_button(u.Entity):
         self.onclick = onclick
         self.collider=collider
     def destroy(self):
+        self.on_mouse_exit()
         u.destroy(self)
     def input(self, key):
         if self.hovered:
@@ -20,6 +22,10 @@ class test_button(u.Entity):
                     self.onclick[0]()
                 if key == "right mouse down":
                     self.onclick[1]()
+    def on_mouse_exit(self):
+        Cursor.texture = "cursor_default"
+    def on_mouse_enter(self):
+        Cursor.texture = "cursor_fat"
 
 def swap_texture(button):
     if button.texture.name == "sun.png":

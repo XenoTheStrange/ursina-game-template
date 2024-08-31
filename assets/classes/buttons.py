@@ -1,4 +1,5 @@
 import ursina as u
+from scripts.manager import Cursor
 
 class glow_button(u.Entity):
     """A button for the flags in the language-select screen"""
@@ -34,18 +35,21 @@ class glow_button(u.Entity):
                     self.glow_entity.animate_color(u.hsv(0,0,100, a=0.1), duration=.02, interrupt='stop')
                 if key == "left mouse up":
                     self.onclick[0]()
-    def update(self):
-        if self.hovered and not self.glowing:
-            self.glowing = True
-            self.start_glowing()
-        if not self.hovered and self.glowing:
+    def on_mouse_exit(self):
+        Cursor.texture = "cursor_default"
+        if self.glowing:
             self.stop_glowing()
-            self.glowing=False
+    def on_mouse_enter(self):
+        Cursor.texture = "cursor_fat"
+        if not self.glowing:
+            self.start_glowing()
     def start_glowing(self):
         #if the left mouse button is already held down, use the second glow effect instead
+        self.glowing = True
         if self.lmd:
-            self.glow_entity.animate_color(u.hsv(0,0,100, a=0.1), duration=.02, interrupt='stop')
+            self.glow_entity.animate_color(u.hsv(0,0,100, a=0.1), duration=.02, interrupt='finish')
         else:    
-            self.glow_entity.animate_color(u.hsv(0,0,100, a=0.2), duration=.02, interrupt='stop')
+            self.glow_entity.animate_color(u.hsv(0,0,100, a=0.2), duration=.02, interrupt='finish')
     def stop_glowing(self):
-        self.glow_entity.animate_color(u.hsv(0,0,100, a=0), duration=.02, interrupt='stop')
+        self.glowing = False
+        self.glow_entity.animate_color(u.hsv(0,0,100, a=0), duration=.02, interrupt='finish')

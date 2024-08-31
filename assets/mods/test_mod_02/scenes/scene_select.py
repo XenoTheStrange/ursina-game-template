@@ -15,12 +15,13 @@ def controls(key, scene):
         toggle_grid(scene)
 
 def Prefix(scene):
-    entities = []
-    entities.append(
-        u.Entity(input=lambda key: controls(key, scene))
-    )
     test = Test()
     #log.debug(test.speak())
-    return entities
+    return []
 
-scene_mod = SceneMod(name="scene_select", prefix=Prefix)
+def Postfix(scene):
+    tmp = scene.get_entity_named("scene_select")
+    tmp.text="Here"
+    return [u.Entity(input=lambda key: controls(key, scene))]
+
+scene_mod = SceneMod(name="scene_select", prefix=Prefix, postfix=Postfix)
