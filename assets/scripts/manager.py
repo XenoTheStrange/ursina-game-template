@@ -11,7 +11,7 @@ import ursina
 
 Scenes = []
 Mods = []
-Cursor = ""
+Cursor = None
 cursor_default_texture = "cursor_default"
 CurrentScene = ""
 Language = ""
@@ -111,8 +111,17 @@ def load_all_mods():
         load_mod(f"./mods", folder)
     log.debug(f"Mods loaded: {', '.join([mod['name'] for mod in globals()['Mods']])}")
 
+def hide_cursor_if_outside():
+    global Cursor
+    if ursina.mouse.is_outside:
+        if Cursor.visible:
+            Cursor.visible = False
+    elif not Cursor.visible:
+        Cursor.visible = True
+
 def initialize():
-    globals()['Cursor'] = ursina.Cursor(name="game_cursor", texture="cursor_default")
+    globals()['Cursor'] = ursina.Cursor(name="game_cursor", texture="cursor_default", eternal=True)
+    cursor_hider = ursina.Entity("cursor_hider").update = hide_cursor_if_outside
     ursina.mouse.visible = False
     load_all_scenes()
     load_all_mods()
