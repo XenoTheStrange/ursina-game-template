@@ -1,6 +1,7 @@
 import ursina as u
-from classes.SceneMod import SceneMod
 from scripts.manager import Cursor
+
+from scripts.mod_utils import before_hook, after_hook
 
 class test_button(u.Entity):
     def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model=u.Default, texture=None, onclick=(None, None), collider=None, **kwargs):
@@ -33,16 +34,19 @@ def swap_texture(button):
     else:
         button.texture = "sun"
 
-def Prefix(scene):
+@after_hook("scenes.language_select.loader")
+def my_scene_postfix(entities_list, *args, **kwargs):
     button = test_button(
         position=(0,0.35,-2),
         scale=(0.3,0.3),
         parent=u.camera.ui,
         model="quad",
-        texture="sun",
+        texture="sun"
         )
     button.onclick = (lambda:swap_texture(button), lambda:button.destroy())
     button.collider = u.SphereCollider(button, radius=.15)
-    return [button]
 
-scene_mod = SceneMod("language_select", prefix=Prefix)
+    #the result passed in is the output of the function we're wrapping,
+    #the return value of a loader is the list of entities in that scene, so we can append to it to add our button
+    entities_list.append(button)
+    return entities_list

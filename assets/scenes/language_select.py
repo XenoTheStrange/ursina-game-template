@@ -22,4 +22,5 @@ def loader(scene):
         )
     ]
 
-scene = Scene(name="language_select", loader=loader)
+def get_scene():
+    return Scene(name="language_select", loader=loader)

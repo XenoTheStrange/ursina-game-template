@@ -45,4 +45,5 @@ def loader(scene):
     return entities
     #scene.add_entities(entities)
 
-scene = Scene("scene_select", loader=loader, controls=controls)
+def get_scene():
+    return Scene("scene_select", loader=loader, controls=controls)

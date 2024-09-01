@@ -18,8 +18,6 @@ class Scene:
         self.parent = parent
         self.controller = ursina.Entity(input=self.controls)
         self.entities.append(self.controller)
-        self.mods_prefix=[]
-        self.mods_postfix=[]
     @error_handler
     def get_entity_named(self, name):
         for entity in self.entities:
@@ -31,14 +29,10 @@ class Scene:
             self.entities.append(entity)
     def load(self):
         if self.loader is not None:
-            self.add_entities(self.loader(self))
-    def load_mods(self, func_list):
-        for func in func_list:
-            entities = func(self)
+            entities = self.loader(self)
             if entities is not None:
                 self.add_entities(entities)
     def destroy(self):
-        #log.debug(f"Destroying scene: {self.name}")
         for entity in self.entities:
             try:
                 ursina.destroy(entity)
@@ -47,8 +41,5 @@ class Scene:
                 #'NoneType' object has no attribute 'eternal'
                 pass
         self.entities = []
-    def create(self):
-        self.load_mods(self.mods_prefix)
-        self.load()
-        self.load_mods(self.mods_postfix)
+
 

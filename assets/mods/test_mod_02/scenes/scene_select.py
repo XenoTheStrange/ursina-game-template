@@ -1,27 +1,31 @@
 import ursina as u
-from classes.SceneMod import SceneMod
 from scripts.logger import error_handler
 
-from scripts.manager import log
-from ..classes.import_test import Test
+from scripts.mod_utils import after_hook
 
 @error_handler
-def toggle_grid(scene):
-    grid = scene.get_entity_named("grid.scenes")
-    grid.toggle_visibility()
+def toggle_grid(grid):
+    if grid is not None:
+        grid.toggle_visibility()
 
-def controls(key, scene):
+def controls(key, grid):
     if key == "space":
-        toggle_grid(scene)
+        toggle_grid(grid)
 
-def Prefix(scene):
-    test = Test()
-    #log.debug(test.speak())
-    return []
-
-def Postfix(scene):
-    tmp = scene.get_entity_named("scene_select")
-    tmp.text="Here"
-    return [u.Entity(input=lambda key: controls(key, scene))]
-
-scene_mod = SceneMod(name="scene_select", prefix=Prefix, postfix=Postfix)
+@after_hook("scenes.scene_select.loader")
+def my_scene_postfix(entities_list, *args, **kwargs):
+    #After the scene is changed, if it was changed to scene_select, change the text of an existing entity and add a new one to the scene.
+    grid=None
+    #Iterate through the entities in the scene. This will fail if any item does not have a name
+    for entity in entities_list:
+        #Change the text of the scene_select button in the list
+        if entity.name == "scene_select":
+            entity.text = "Here"
+        #Get a reference to the grid we want to toggle
+        if entity.name == "grid.scenes":
+            grid = entity
+    #Add our controller to the entity list
+    entities_list.append(
+        u.Entity(name="tmod2.controller", input=lambda key: controls(key, grid))
+        )
+    return entities_list
