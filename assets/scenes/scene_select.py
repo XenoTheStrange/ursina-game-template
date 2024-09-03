@@ -43,7 +43,6 @@ def loader(scene):
     entities.append(u.Button(text=f"Language: {manager.Language}", position=position, scale=(.1,.05)))
     entities.append(grid)
     return entities
-    #scene.add_entities(entities)
 
 def get_scene():
-    return Scene("scene_select", loader=loader, controls=controls)
+    return Scene(name="scene_select", loader=loader, controls=controls)

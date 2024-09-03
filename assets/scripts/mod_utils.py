@@ -3,12 +3,9 @@ import importlib
 import json
 import os, sys
 
-from classes import Scene
 from scripts.logger import log
-#cannot directly import scripts.manager otherwise it causes a circular import
 
-
-# This will keep track of function modifications
+# Dictionary to track hooks separately
 modifications = {}
 
 def get_function_from_string(function_path):
@@ -18,61 +15,51 @@ def get_function_from_string(function_path):
     func = getattr(module, func_name)
     return module, func_name, func
 
+def make_wrapped_func(original_func, hooks):
+    def wrapped(*args, **kwargs):
+        # Run before hooks
+        for func in hooks['before']:
+            func(*args, **kwargs)
+        # Call the original function
+        result = original_func(*args, **kwargs)
+        # Run after hooks
+        for func in hooks['after']:
+            result = func(result, *args, **kwargs)
+        return result
+    return wrapped
+
 def apply_modifications():
-    """Apply all recorded modifications in the order they were added."""
     for function_path, hooks in modifications.items():
-        module, func_name, original_func = get_function_from_string(function_path)
-        
-        # Apply hooks in reverse order
-        for hook_func in reversed(hooks):
-            wrapped_func = hook_func(original_func)
-        
+        module, func_name, original_func = get_function_from_string(function_path)    
+        wrapped_func = make_wrapped_func(original_func, hooks)
         setattr(module, func_name, wrapped_func)
-        replaced_func = getattr(module, func_name)
-        print(f"{function_path} is replaced: {replaced_func is wrapped_func}")
+    log.debug("Finished applying modifications")
 
 def before_hook(function_path):
     """Decorator to insert code before the specified function."""
     def decorator(hook_func):
-        print(f"[MOD_LOADER] Applying before_hook to {function_path}")
         if function_path not in modifications:
-            modifications[function_path] = []
-        
-        def wrapper(original_func):
-            def wrapped(*args, **kwargs):
-                hook_func(*args, **kwargs)
-                return original_func(*args, **kwargs)
-            return wrapped
-        
-        modifications[function_path].append(wrapper)
+            modifications[function_path] = {'before': [], 'after':[], 'override':[]}
+        modifications[function_path]['before'].append(hook_func)
         return hook_func
     return decorator
 
 def after_hook(function_path):
     """Decorator to insert code after the specified function."""
     def decorator(hook_func):
-        print(f"[MOD_LOADER] Applying after_hook to {function_path}")
         if function_path not in modifications:
-            modifications[function_path] = []
-        
-        def wrapper(original_func):
-            def wrapped(*args, **kwargs):
-                result = original_func(*args, **kwargs)
-                return hook_func(result, *args, **kwargs)
-            return wrapped
-        
-        modifications[function_path].append(wrapper)
+            modifications[function_path] = {'before': [], 'after':[], 'override':[]}
+        modifications[function_path]['after'].append(hook_func)
         return hook_func
     return decorator
 
 def override_hook(function_path):
     """Decorator to completely replace the specified function."""
     def decorator(hook_func):
-        print(f"[MOD_LOADER] Applying override_hook to {function_path}")
         if function_path not in modifications:
-            modifications[function_path] = []
-        
-        modifications[function_path].append(lambda _: hook_func)
+            modifications[function_path] = {'before': [], 'after':[], 'override':[]}
+        module, func_name, _ = get_function_from_string(function_path)
+        modifications[function_path]['override'] = [hook_func]
         return hook_func
     return decorator
 
@@ -99,3 +86,4 @@ def load_all_mods():
         load_mod("./mods", folder)
     apply_modifications()
     log.debug(f"Mods loaded: {', '.join([mod['name'] for mod in globals()['Mods']])}")
+
