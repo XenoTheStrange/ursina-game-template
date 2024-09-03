@@ -1,7 +1,7 @@
 import ursina as u
 from scripts.manager import Cursor
 
-from scripts.mod_utils import before_hook, after_hook
+from scripts.mod_utils import after_hook
 
 class test_button(u.Entity):
     def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model=u.Default, texture=None, onclick=(None, None), collider=None, **kwargs):

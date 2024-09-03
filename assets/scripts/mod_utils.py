@@ -21,7 +21,10 @@ def make_wrapped_func(original_func, hooks):
         for func in hooks['before']:
             func(*args, **kwargs)
         # Call the original function
-        result = original_func(*args, **kwargs)
+        if len(hooks['override']) > 0:
+            result = hooks['override'][-1](*args, **kwargs)
+        else:
+            result = original_func(*args, **kwargs)
         # Run after hooks
         for func in hooks['after']:
             result = func(result, *args, **kwargs)
@@ -58,8 +61,7 @@ def override_hook(function_path):
     def decorator(hook_func):
         if function_path not in modifications:
             modifications[function_path] = {'before': [], 'after':[], 'override':[]}
-        module, func_name, _ = get_function_from_string(function_path)
-        modifications[function_path]['override'] = [hook_func]
+        modifications[function_path]['override'].append(hook_func)
         return hook_func
     return decorator
 
