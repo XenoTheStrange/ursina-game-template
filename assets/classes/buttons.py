@@ -1,7 +1,7 @@
 import ursina as u
 from scripts.manager import Cursor
 
-class glow_button(u.Entity):
+class language_flag(u.Entity):
     """A button for the flags in the language-select screen"""
     def __init__(self, position=(0,0,0), scale=(1,1), parent=u.Default, model="quad", texture=None, onclick=(None, None), collider="box", text=None, text_scale=(10,12), text_position=(0.6,0.1,-2), text_font="fonts/Helvetica-Bold.ttf", **kwargs):
         super().__init__()

@@ -2,6 +2,7 @@ import ursina as u
 from scripts.logger import error_handler
 
 from scripts.mod_utils import after_hook
+from scripts.manager import devmode
 
 @error_handler
 def toggle_grid(grid):
@@ -14,7 +15,8 @@ def controls(key, grid):
 
 @after_hook("scenes.scene_select.loader")
 def my_scene_postfix(entities_list, *args, **kwargs):
-    print("BBBBBBB This should happen second")
+    if devmode:
+        print("[TEST_MOD_02] This should happen second")
     #After the scene is changed, if it was changed to scene_select, change the text of an existing entity and add a new one to the scene.
     grid=None
     #Iterate through the entities in the scene. This will fail if any item does not have a name

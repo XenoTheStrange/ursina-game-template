@@ -77,13 +77,12 @@ def load_mod(path, folder):
     importlib.import_module(f"mods.{folder}.main")
 
 def load_all_mods():
-    from scripts.manager import get_folders
     #add the mods dir to the path so they can use relative imports
     mods_dir = os.path.abspath('./mods')
     sys.path.insert(0, mods_dir)
     globals()['Mods'] = []
     log.debug("Loading mods from ./mods")
-    folders = get_folders("./mods")
+    folders = [folder for folder in os.listdir("./mods") if os.path.isdir(f"./mods/{folder}")]
     for folder in folders:
         load_mod("./mods", folder)
     apply_modifications()

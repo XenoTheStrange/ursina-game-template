@@ -1,0 +1,7 @@
+{
+    "name": "mod_menu",
+    "description": "Adds a mod_menu scene and a button to the title screen for navigation.",
+    "author": "SunPraise",
+    "module_dependencies": [],
+    "mod_dependencies": []
+}

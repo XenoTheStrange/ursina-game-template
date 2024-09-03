@@ -31,6 +31,9 @@ def get_scene(name):
             return scene
     return False
 
+def add_scene(scene):
+    globals()['Scenes'].append(scene)
+
 def change_scene(name):
     """Destroy the current scene and load a new one"""
     global CurrentScene
@@ -62,7 +65,7 @@ def load_scene(name):
         log.error(f"Exception occurred while changing scenes.\nScene name: {name}\nException: {error.__repr__() + ''.join(traceback.format_tb(error.__traceback__))}\n")
 
 def load_all_scenes():
-    globals()['Scenes'] = []
+    #globals()['Scenes'] = []
     log.debug("Loading scenes from %s", "./scenes")
     scene_names = get_scene_names("./scenes")
     for name in scene_names:
