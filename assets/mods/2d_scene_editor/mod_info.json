@@ -1,6 +1,6 @@
 {
-    "name": "Mod Menu",
-    "pkg_id": "SP.mod_menu",
+    "name": "Janky 2D Scene Editor",
+    "pkg_id": "SP.sonny_scene_editor",
     "description": "Adds a mod_menu scene and a button to the title screen for navigation.",
     "author": "SunPraise",
     "module_dependencies": [],

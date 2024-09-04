@@ -1,5 +1,6 @@
 {
-    "name": "test_mod_01",
+    "name": "Test Mod 1",
+    "pkg_id": "SP.test_mod_01",
     "description": "A test mod created during design of the mod loader. Adds a sun to the language select screen and a draggable kitty to the scene_select screen.",
     "author": "SunPraise",
     "module_dependencies": [],

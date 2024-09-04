@@ -12,12 +12,3 @@ def my_scene_postfix(entities_list, *args, **kwargs):
     )
     return entities_list
 
-def loader(scene):
-    print("Nothing is here yet")
-    return [
-        u.Text(text="nothing here", parent=u.camera.ui)
-    ]
-
-manager.add_scene(
-    Scene(name="mod_menu", loader=loader)
-    )
