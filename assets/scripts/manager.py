@@ -22,7 +22,10 @@ def get_scene_names(dir):
     return [i.split(".")[:-1][0] for i in os.listdir(dir) if not i=="__init__.py" and ".py" in i]
 def get_folders(dir):
     return [folder for folder in os.listdir(dir) if os.path.isdir(f"{dir}/{folder}")]
-    
+
+def get_current_scene():
+    return CurrentScene
+   
 def get_scene(name):
     if name is True:
         return globals()['Scenes']
