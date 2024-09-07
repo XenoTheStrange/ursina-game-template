@@ -5,7 +5,7 @@ from ursina.collider import BoxCollider
 from classes.draggable_entity import Draggable_Entity
 from scripts.manager import add_scene, change_scene, get_current_scene
 from classes.Scene import Scene
-
+from .classes.list_window import ListWindow
 selected_entity = None
 
 def select_entity(entity):
@@ -22,10 +22,12 @@ def create_text(entities_window, *args, **kwargs):
     entities_window.layout()
     scene.add_entities([entity])
 
-def create_entity(entities_window, *args, **kwargs):
+def create_entity(entities_window, text="yeet", *args, **kwargs):
     scene = get_current_scene()
     #entity = Entity_Parent(entity=u.Entity(*args, **kwargs))
     entity = u.Entity(editor_obj=True, collider="box", *args, **kwargs)
+    text = u.Text(parent=entity, text=text, origin=(0,0))
+    text.world_scale = u.Vec3(20 * text.scale)
     scene.add_entities([entity])
     button = u.Button(text=str(entity.name))
     button.on_click = lambda: select_entity(entity)
@@ -60,8 +62,10 @@ def loader(scene):
 
     def dragger_controls(key):
         if key == "left mouse down":
+            dragger.mouse_pos = u.mouse.position
             if hasattr(u.mouse.hovered_entity, "editor_obj"):
                 dragger.target = u.mouse.hovered_entity
+                dragger.entity_pos = dragger.target.position
                 globals()['selected_entity'] = u.mouse.hovered_entity
             else:
                 globals()['selected_entity'] = None
@@ -73,9 +77,9 @@ def loader(scene):
     
     def dragger_update():
         if dragger.target is not None:
-            dragger.target.position = u.mouse.position
+            dragger.target.position = dragger.entity_pos + (u.mouse.position - dragger.mouse_pos)
     
-    dragger = u.Entity(name="controller.dragger", input=dragger_controls, update=dragger_update, target=None)
+    dragger = u.Entity(name="controller.dragger", input=dragger_controls, update=dragger_update, target=None, mouse_pos=None, entity_pos=None)
     
     entities_window = WindowPanel(name="window.entities", title="Entities", content=[], parent=u.camera.ui, position=u.window.top_right)
     entities_window.position += (-entities_window.scale.x/2, 0, -99)
@@ -87,6 +91,7 @@ def loader(scene):
         ]
     content[0].on_click = lambda:create_text(entities_window, name="fucktext", text="fuck", parent=u.camera.ui)
     content[1].on_click = lambda:create_entity(entities_window, name="entity", model="quad", parent=u.camera.ui, scale=(.1,.1), color=u.color.black33)
+    content[2].on_click = lambda:create_entity(entities_window, name="entity_text", text="yeet", model="quad", parent=u.camera.ui, scale=(.1,.1), color=u.color.green)
 
     templates_window = WindowPanel(name="window.templates", title='Templates', content=content, parent=u.camera.ui, position=u.window.top_left)
     templates_window.position += (templates_window.scale.x/2, 0, -98)
@@ -109,6 +114,13 @@ def loader(scene):
     entities_list.append(properties_window)
     entities_list.append(templates_window)
     entities_list.append(controller)
+    tno=ListWindow(editor_obj=True, collider="box")
+    tno.add_button(on_click=lambda:print("click works"))
+    tno.add_button(text="yeet", on_click=lambda:print("2 click works"))
+    button = u.Button(text="ListWindow")
+    button.on_click = lambda: select_entity(tno)
+    entities_window.content.append(button)
+    entities_window.layout()
     return entities_list
 
 add_scene(Scene(name="2d_editor", loader=loader))
