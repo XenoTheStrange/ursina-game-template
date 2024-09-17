@@ -11,8 +11,13 @@ class SceneEditor(u.Entity):
         self.create_windows()
 
     def create_windows(self):
-        self.window_templates = ListWindow(content=self.load_templates())
+        self.window_templates = ListWindow(content=self.load_custom_entities())
         self.window_entities = ListWindow()
         self.window_classes = ListWindow()
-
+    
+    def load_custom_entities(self):
+        pass
+        #import python file and scan it for classes which inherit from u.Entity at some point.
+        #load these files from groot/assets/entities and mod/entities
+        #create buttons in the templates pane for each entity imported this way
 

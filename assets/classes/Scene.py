@@ -24,6 +24,7 @@ class Scene:
             if hasattr(entity, "name"):
                 if entity.name == name:
                     return entity
+        return None
     def add_entities(self, entities):
         for entity in entities:
             self.entities.append(entity)
